@@ -19,6 +19,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/bmatcuk/doublestar"
 	"github.com/casbin/casbin/rbac"
 )
 
@@ -138,6 +139,19 @@ func IPMatchFunc(args ...interface{}) (interface{}, error) {
 	ip2 := args[1].(string)
 
 	return bool(IPMatch(ip1, ip2)), nil
+}
+
+// PathMatch uses path pattern matching with doublestar support.
+func PathMatch(target string, pattern string) (bool, error) {
+	return doublestar.Match(pattern, target)
+}
+
+// PathMatchFunc is the wrapper for PathMatch.
+func PathMatchFunc(args ...interface{}) (interface{}, error) {
+	name1 := args[0].(string)
+	name2 := args[1].(string)
+
+	return PathMatch(name1, name2)
 }
 
 // GenerateGFunction is the factory method of the g(_, _) function.
